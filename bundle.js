@@ -6865,13 +6865,49 @@ function through (write, end) {
 
 
 },{"__browserify_process":26,"stream":4}],30:[function(require,module,exports){
+var Buffer=require("__browserify_Buffer").Buffer;module.exports = function streamToBuffer(stream, callback) {
+  var done = false
+  var buffers = []
+
+  stream.on('data', function (data) {
+    buffers.push(data)
+  })
+
+  stream.on('end', function () {
+    if (done)
+      return
+
+    done = true
+    callback(null, Buffer.concat(buffers))
+    buffers = null
+  })
+
+  stream.on('error', function (err) {
+    done = true
+    buffers = null
+    callback(err)
+  })
+}
+},{"__browserify_Buffer":25}],31:[function(require,module,exports){
 var hyperquest = require('hyperquest');
+var stream2Buffer = require('stream-to-buffer');
 
 hyperquest.get('/posts/blog.json', function (err, res) {
-  res.on('data', function (data) {
-    console.log('data', data);
-  })
+  stream2Buffer(res, function (err, buffer) {
+     
+  });
 });
 
-},{"hyperquest":27}]},{},[30])
+hyperquest.get('/posts/blog.json', gotPosts);
+
+function gotPosts (err, res) {
+  stream2Buffer(res, gotPostsBuffer);
+}
+
+function gotPostsBuffer (err, buffer) {
+  var posts = JSON.parse(buffer);
+  console.log(posts);
+}
+
+},{"hyperquest":27,"stream-to-buffer":30}]},{},[31])
 ;

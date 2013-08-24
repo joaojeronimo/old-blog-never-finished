@@ -11,8 +11,9 @@ posts.forEach(function (post) {
   var stat = fs.statSync(__dirname + '/posts/'+post);
   blog.push({
     title: Case.title(post.substr(0, post.length -3)),
-    mtime: stat.mtime,
-    ctime: stat.ctime
+    file: post,
+    mtime: stat.mtime.getTime(),
+    ctime: stat.ctime.getTime()
   });
 });
 

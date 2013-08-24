@@ -18,6 +18,7 @@
   "dependencies": {
     "hyperquest": "~0.1.7",
     "live-server": "~0.5.0",
-    "case": "~1.0.3"
+    "case": "~1.0.3",
+    "stream-to-buffer": "0.0.1"
   }
 }
