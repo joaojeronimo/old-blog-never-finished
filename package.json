@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "posts": "./posts.js",
+    "start": "live-server ."
   },
   "author": "",
   "license": "BSD",
@@ -15,6 +16,8 @@
     "grunt-contrib-watch": "~0.5.2"
   },
   "dependencies": {
-    "hyperquest": "~0.1.7"
+    "hyperquest": "~0.1.7",
+    "live-server": "~0.5.0",
+    "case": "~1.0.3"
   }
 }

@@ -6867,7 +6867,7 @@ function through (write, end) {
 },{"__browserify_process":26,"stream":4}],30:[function(require,module,exports){
 var hyperquest = require('hyperquest');
 
-hyperquest.get('http://localhost:8080/posts/', function (err, res) {
+hyperquest.get('/posts/blog.json', function (err, res) {
   res.on('data', function (data) {
     console.log('data', data);
   })

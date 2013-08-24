@@ -1,6 +1,6 @@
 var hyperquest = require('hyperquest');
 
-hyperquest.get('http://localhost:8080/posts/', function (err, res) {
+hyperquest.get('/posts/blog.json', function (err, res) {
   res.on('data', function (data) {
     console.log('data', data);
   })
