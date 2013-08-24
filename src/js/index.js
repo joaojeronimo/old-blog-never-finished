@@ -1,19 +1,18 @@
-var hyperquest = require('hyperquest');
-var stream2Buffer = require('stream-to-buffer');
+var getPosts = require('./lib/get-posts');
 
-hyperquest.get('/posts/blog.json', function (err, res) {
-  stream2Buffer(res, function (err, buffer) {
-     
-  });
-});
+var sortedPosts;
 
-hyperquest.get('/posts/blog.json', gotPosts);
+getPosts(gotPosts);
 
-function gotPosts (err, res) {
-  stream2Buffer(res, gotPostsBuffer);
+function gotPosts(posts) {
+  loadLatestPost(posts);
 }
 
-function gotPostsBuffer (err, buffer) {
-  var posts = JSON.parse(buffer);
-  console.log(posts);
+function loadLatestPost(posts) {
+  sortedPosts = posts.sort(comparePostAge);
+  console.log(sortedPosts);
+}
+
+function comparePostAge (a, b) {
+  return a.ctime - b.ctime;
 }

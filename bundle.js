@@ -6889,24 +6889,48 @@ var Buffer=require("__browserify_Buffer").Buffer;module.exports = function strea
   })
 }
 },{"__browserify_Buffer":25}],31:[function(require,module,exports){
+var getPosts = require('./lib/get-posts');
+
+var sortedPosts;
+
+getPosts(gotPosts);
+
+function gotPosts(posts) {
+  loadLatestPost(posts);
+}
+
+function loadLatestPost(posts) {
+  sortedPosts = posts.sort(comparePostAge);
+  console.log(sortedPosts);
+}
+
+function comparePostAge (a, b) {
+  return a.ctime - b.ctime;
+}
+
+},{"./lib/get-posts":32}],32:[function(require,module,exports){
 var hyperquest = require('hyperquest');
 var stream2Buffer = require('stream-to-buffer');
 
-hyperquest.get('/posts/blog.json', function (err, res) {
-  stream2Buffer(res, function (err, buffer) {
-     
-  });
-});
+exports =
+module.exports =
+function getPosts(callback) {
+  hyperquest.get('/posts/blog.json', gotPosts);
 
-hyperquest.get('/posts/blog.json', gotPosts);
+  function gotPosts (err, res) {
+    if (err)
+      return callback(err);
 
-function gotPosts (err, res) {
-  stream2Buffer(res, gotPostsBuffer);
-}
+    stream2Buffer(res, gotPostsBuffer);
+  }
 
-function gotPostsBuffer (err, buffer) {
-  var posts = JSON.parse(buffer);
-  console.log(posts);
+  function gotPostsBuffer (err, buffer) {
+    if (err)
+      return callback(err);
+
+    var posts = JSON.parse(buffer);
+    callback(null, posts);
+  }
 }
 
 },{"hyperquest":27,"stream-to-buffer":30}]},{},[31])
