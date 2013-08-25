@@ -1,46 +1,31 @@
-var getPosts = require('./lib/get-posts');
-var fetchPost = require('./lib/fetch-post');
-var renderPost = require('./lib/render-post');
-var onScroll = require('./lib/on-scroll');
+var Router = require('route').Router;
+var cleanSections = require('./lib/clean-sections');
 
-var sortedPosts;
-var lastPost;
+var displayHome = require('./home');
+var displayPost = require('./post');
 
-bootstrap();
+var router = new Router();  
 
-function bootstrap () {
-  getPosts(loadLatestPost);
+router.add({
+  '': goHome,
+  '#posts/:post': showPost
+});
+
+document.addEventListener('DOMContentLoaded', go);
+window.onhashchange = go;
+
+function go () {
+  router.run(document.location.hash);
 }
 
-function loadLatestPost(err, posts) {
-  if (err)
-    throw new Error(err);
-  sortedPosts = posts.sort(comparePostAge);
-  lastPost = sortedPosts.pop();
-  fetchPost(lastPost, gotBody); 
+function goHome () {
+  cleanSections();
+  displayHome();
 }
 
-function comparePostAge (a, b) {
-  return a.ctime - b.ctime;
-}
-
-function gotBody (err, body) {
-  if (err)
-    throw new Error(err);
-
-  lastPost.body = body;
-  localStorage[lastPost.title] = JSON.stringify(lastPost);
-  renderPost(lastPost);
-  loadMore();
-}
-
-function loadMore () {
-  window.onscroll = onScroll(onEndOfPage);
-}
-
-function onEndOfPage () {
-  lastPost = sortedPosts.pop();                                                                                                        
-  if (!lastPost)
-    return;
-  fetchPost(lastPost, gotBody);
+function showPost (loc) {
+  window.onscroll = function () {};
+  cleanSections();
+  window.scrollTo(0, 0);
+  displayPost(loc.post);
 }

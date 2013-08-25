@@ -13,6 +13,12 @@ module.exports = function(grunt) {
         dest: "index.html"
       }
     },
+    less: {
+      index: {
+        src: "src/less/index.less",
+        dest: "style.css"
+      }
+    },
     watch: {
       js: {
         files: ["src/js/*",
@@ -23,6 +29,11 @@ module.exports = function(grunt) {
         files: ["src/jade/*",
                 "src/jade/**/*"],
         tasks: ["jade"]
+      },
+      less: {
+        files: ["src/less/*",
+                "src/less/**"],
+        tasks: ["less"]
       }
     }
   });
@@ -30,7 +41,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
-  grunt.registerTask('default', ['browserify', 'jade']);
+  grunt.registerTask('default', ['browserify', 'jade', 'less']);
 
 };
