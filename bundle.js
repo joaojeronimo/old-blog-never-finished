@@ -8663,6 +8663,8 @@ function loadMore () {
 
 function onEndOfPage () {
   lastPost = sortedPosts.pop();                                                                                                        
+  if (!lastPost)
+    return;
   fetchPost(lastPost, gotBody);
 }
 
