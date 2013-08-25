@@ -8839,7 +8839,9 @@ function gotBody (err, body) {
 
   lastPost.body = body;
   localStorage[lastPost.title] = JSON.stringify(lastPost);
-  renderPost(lastPost);
+  renderPost(lastPost, {
+    truncate: 900
+  });
   loadMore();
 }
 
@@ -8953,9 +8955,8 @@ exports =
 module.exports =
 function onScroll(trigger) {
   return function () {
-    var scrolledtonum = window.pageYOffset + window.innerHeight - 16;
-    var heightofbody = document.body.offsetHeight;
-    if (scrolledtonum === heightofbody) {
+    var scrolledtonum = window.pageYOffset + window.innerHeight + 200;
+    if (scrolledtonum > document.height) {
       trigger();
     }
   }
@@ -8968,12 +8969,33 @@ var Case = require('case');
 
 exports =
 module.exports =
-function renderPost (post) {
-  var html = markdown.toHTML(post.body);
-  var h1 = '<h1 class="postTitle"><a href="#posts/'+
-           Case.squish(post.title)+
+function renderPost (post, options) {
+  var body = post.body;
+  var html;
+  var postUrl = '#posts/'+Case.squish(post.title);
+ 
+  if (options &&
+      options.truncate &&
+      options.truncate < body.length) {
+
+    var readMore = '<p><a href="'+postUrl+
+                   '" class="readMore">'+
+                   'read more'+
+                   '</a></p>'; 
+    body = body.substring(0, options.truncate)+'...';
+    html = markdown.toHTML(body) + readMore;
+  } else
+    html = markdown.toHTML(body);
+
+    var postInfo = '<span class="postInfo">'+
+                 'Published on '+new Date(post.ctime).toUTCString()+
+                 '</span>';
+  var h1 = '<h1 class="postTitle"><a href="'+postUrl+
            '">'+post.title+'</a></h1>';
-  html = h1 + html;
+  html = postInfo + h1 + html;
+
+
+
   var el = document.createElement('section');
   el.innerHTML = html;
   document.body.insertBefore(el, $('footer'));

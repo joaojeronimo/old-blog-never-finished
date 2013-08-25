@@ -30,7 +30,9 @@ function gotBody (err, body) {
 
   lastPost.body = body;
   localStorage[lastPost.title] = JSON.stringify(lastPost);
-  renderPost(lastPost);
+  renderPost(lastPost, {
+    truncate: 900
+  });
   loadMore();
 }
 
