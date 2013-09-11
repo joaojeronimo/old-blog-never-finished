@@ -8797,12 +8797,17 @@ var Buffer=require("__browserify_Buffer").Buffer;module.exports = function strea
 
     done = true
 
-    if (stream._readableState.encoding === 'utf8' ||
-        stream._readableState.encoding === 'ascii')
-      callback(null, buffers.join(''));
-    else
-      callback(null, Buffer.concat(buffers))
+
+    var buff
     
+    try {
+      buff = Buffer.concat(buffers)
+    } catch (err) {
+      console.error(err)
+      buff = buffers.join('')
+    }
+    
+    callback(null, buff)
     buffers = null
   })
 
