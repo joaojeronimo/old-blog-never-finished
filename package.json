@@ -19,8 +19,9 @@
   },
   "dependencies": {
     "hyperquest": "~0.1.7",
-    "case": "~1.0.3",
-    "stream-to-buffer": "0.0.1",
-    "markdown": "~0.5.0"
+    "stream-to-buffer": "git+ssh://git@github.com:joaojeronimo/stream-to-buffer.git",
+    "markdown": "~0.5.0",
+    "route": "~0.2.5",
+    "case": "~1.0.3"
   }
 }

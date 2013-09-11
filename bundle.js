@@ -2037,7 +2037,7 @@ var isArray = Array.isArray || function (xs) {
 ;(function () {
 
   var
-    object = typeof window != 'undefined' ? window : exports,
+    object = typeof exports != 'undefined' ? exports : window,
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
     INVALID_CHARACTER_ERR = (function () {
       // fabricate a suitable error object
@@ -8796,7 +8796,13 @@ var Buffer=require("__browserify_Buffer").Buffer;module.exports = function strea
       return
 
     done = true
-    callback(null, Buffer.concat(buffers))
+
+    if (stream._readableState.encoding === 'utf8' ||
+        stream._readableState.encoding === 'ascii')
+      callback(null, buffers.join(''));
+    else
+      callback(null, Buffer.concat(buffers))
+    
     buffers = null
   })
 
@@ -8806,6 +8812,7 @@ var Buffer=require("__browserify_Buffer").Buffer;module.exports = function strea
     callback(err)
   })
 }
+
 },{"__browserify_Buffer":26}],35:[function(require,module,exports){
 var getPosts = require('./lib/get-posts');
 var fetchPost = require('./lib/fetch-post');
